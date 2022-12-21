@@ -1,0 +1,22 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: 'AWS::Serverless-2016-10-31'
+Description: 'GlobusAuthHelloWorldLambdaAuthorizer'
+Parameters: 
+  TopicNameParameter: 
+    Type: String
+Resources:
+  apigatewayauthorizerpython:
+    Type: 'AWS::Serverless::Function'
+    Properties:
+      Architectures:
+        - arm64
+      Handler: lambda_function.lambda_handler
+      Runtime: python3.9
+      CodeUri: .
+      Description: 'GlobusAuthHelloWorldLambdaAuthorizer'
+      MemorySize: 256
+      Timeout: 5
+      Policies:
+        - SNSPublishMessagePolicy:
+            TopicName: !Ref TopicNameParameter
+
