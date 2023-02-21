@@ -1,6 +1,9 @@
 import globus_sdk
 import boto3
+import json
 
+
+SEARCH_INDEX_UUID = '58e4df29-4492-4e7d-9317-b27eba62a911'
 
 def get_secret():
     secret_name = "arn:aws:secretsmanager:us-east-2:509474786919:secret:GlobusAuthHelloWorldSecret-0q5j66"
@@ -22,8 +25,10 @@ def get_secret():
 
 
 def lambda_handler(event, context):
+    print("Event received: {} \n".format(event))
+    print("event body: {} \n".format(event['body']))
     # Get the user's access token from the event data
-    access_token = event['access_token']
+    # access_token = event['access_token']
    
     # Get the CLIENT_ID and SECRET 
     globus_secrets = get_secret()
@@ -32,13 +37,18 @@ def lambda_handler(event, context):
     auth_client = globus_sdk.ConfidentialAppAuthClient(
         globus_secrets['API_CLIENT_ID'], globus_secrets['API_CLIENT_SECRET'])
 
+    print("established auth_client\n")
+
     token = event['headers']['authorization'].replace("Bearer ", "")
+
     auth_res = auth_client.oauth2_token_introspect(token, include="identities_set")
-    if not token['active']:
+    print("auth_res: {} \n".format(auth_res))
+    if not auth_res['active']:
         raise Exception("Invalid access token")
 
-    # Get the document file from the event data
-    document_file = event['document_file']
+    # Get the document from the event data
+    body = json.loads(event['body'])
+    document = body['document_file']
 
     # Perform whatever policy checks we are going to do w/r/t write access
     # To determine whether this should be written
@@ -50,5 +60,7 @@ def lambda_handler(event, context):
     search_client = globus_sdk.SearchClient(authorizer=cc_authorizer)
 
     # Ingest the document file into Globus Search
-    search_client.ingest(document_file)
+    res = search_client.ingest(SEARCH_INDEX_UUID,document)
+
+    return res.data
 
