@@ -43,7 +43,7 @@ jobs:
          zip -r ../searchlambda.zip *
          # Put the application code into the top level of our deployable zip archive.
          cd ../
-         zip -r searchlamdba.zip search_ingest_lambda_function.py
+         zip -r searchlambda.zip search_ingest_lambda_function.py
          # Deploy to Lambda.
          aws lambda update-function-code --function-name DLHubGlobusSearchWriter --zip-file fileb://searchlambda.zip
          # Delete temporary packages directory
