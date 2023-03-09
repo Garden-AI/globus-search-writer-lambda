@@ -48,3 +48,9 @@ jobs:
          aws lambda update-function-code --function-name DLHubGlobusSearchWriter --zip-file fileb://searchlambda.zip
          # Delete temporary packages directory
          rm -rf packages
+    - name: Save zipfile
+      uses: actions/upload-artifact@v3
+      with:
+        name: lambda-zipfile
+        path: searchlambda.zip
+        retention-days: 1
