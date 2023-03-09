@@ -9,7 +9,7 @@ SEARCH_INDEX_UUID = '847c9105-18a0-4ffb-8a71-03dd76dfcc9d'
 
 
 def get_secret():
-    secret_name = "DLHub/GlobusSearchWriterClient"
+    secret_name = "arn:aws:secretsmanager:us-east-1:557062710055:secret:DLHub/GlobusSearchWriterClient-rgHEot"
     region_name = "us-east-1"
 
     # Create a Secrets Manager client
