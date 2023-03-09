@@ -3,12 +3,14 @@ import boto3
 import json
 
 
-SEARCH_INDEX_UUID = '58e4df29-4492-4e7d-9317-b27eba62a911'
+SEARCH_INDEX_UUID = '847c9105-18a0-4ffb-8a71-03dd76dfcc9d'
+# production search index is 847c9105-18a0-4ffb-8a71-03dd76dfcc9d
+# dev search index is '58e4df29-4492-4e7d-9317-b27eba62a911'
 
 
 def get_secret():
-    secret_name = "arn:aws:secretsmanager:us-east-2:509474786919:secret:GlobusAuthHelloWorldSecret-0q5j66"
-    region_name = "us-east-2"
+    secret_name = "DLHub/GlobusSearchWriterClient"
+    region_name = "us-east-1"
 
     # Create a Secrets Manager client
     session = boto3.session.Session()
@@ -66,6 +68,7 @@ def lambda_handler(event, context):
     # Perform whatever policy checks we are going to do w/r/t write access
     # To determine whether this should be written
     # For example, check if the user is in the right group
+    # DLHub didn't bother doing this, so for now we won't either.
 
     # Get the document from the event data
     body = json.loads(event['body'])
